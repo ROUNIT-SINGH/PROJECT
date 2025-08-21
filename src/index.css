@@ -1,0 +1,196 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Summer Dark Aesthetic Design System - Scrum Meeting Hub */
+
+@layer base {
+  :root {
+    /* Summer Dark Theme - Deep ocean meets sunset */
+    --background: 215 25% 8%;
+    --foreground: 42 100% 95%;
+
+    --card: 215 20% 12%;
+    --card-foreground: 42 100% 92%;
+
+    --popover: 215 25% 10%;
+    --popover-foreground: 42 100% 95%;
+
+    --primary: 197 71% 52%; /* Deep ocean blue */
+    --primary-foreground: 215 25% 8%;
+    --primary-glow: 197 71% 65%;
+
+    --secondary: 158 58% 45%; /* Forest emerald */
+    --secondary-foreground: 215 25% 8%;
+
+    --accent: 35 91% 65%; /* Sunset orange */
+    --accent-foreground: 215 25% 8%;
+
+    --muted: 215 20% 18%;
+    --muted-foreground: 215 10% 65%;
+
+    --destructive: 0 65% 55%;
+    --destructive-foreground: 42 100% 95%;
+
+    --border: 215 15% 22%;
+    --input: 215 15% 20%;
+    --ring: 197 71% 52%;
+
+    --radius: 0.75rem;
+
+    /* Custom design tokens */
+    --ocean-deep: 215 70% 25%;
+    --ocean-light: 197 71% 52%;
+    --forest-deep: 158 45% 35%;
+    --forest-light: 158 58% 45%;
+    --sunset-warm: 35 91% 65%;
+    --sunset-soft: 35 70% 75%;
+    
+    /* Gradients */
+    --gradient-ocean: linear-gradient(135deg, hsl(var(--ocean-deep)), hsl(var(--primary)));
+    --gradient-sunset: linear-gradient(135deg, hsl(var(--accent)), hsl(var(--sunset-soft)));
+    --gradient-forest: linear-gradient(135deg, hsl(var(--forest-deep)), hsl(var(--secondary)));
+    --gradient-ambient: linear-gradient(180deg, hsl(var(--background)), hsl(215 25% 12%));
+    
+    /* Shadows */
+    --shadow-ocean: 0 10px 30px -5px hsl(var(--primary) / 0.3);
+    --shadow-sunset: 0 10px 30px -5px hsl(var(--accent) / 0.25);
+    --shadow-elegant: 0 4px 20px -2px hsl(215 25% 5% / 0.4);
+    
+    /* Typography */
+    --text-xs: 0.7rem;
+    --text-sm: 0.8rem;
+    --text-base: 0.85rem;
+    --text-lg: 0.95rem;
+    
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    background: var(--gradient-ambient);
+    font-size: var(--text-base);
+    overflow-x: hidden;
+  }
+  
+  /* Utility Classes */
+  .gradient-ocean { background: var(--gradient-ocean); }
+  .gradient-sunset { background: var(--gradient-sunset); }
+  .gradient-forest { background: var(--gradient-forest); }
+  .shadow-ocean { box-shadow: var(--shadow-ocean); }
+  .shadow-sunset { box-shadow: var(--shadow-sunset); }
+  .shadow-elegant { box-shadow: var(--shadow-elegant); }
+  .transition-smooth { transition: var(--transition-smooth); }
+  .transition-bounce { transition: var(--transition-bounce); }
+}
+
+@layer components {
+  /* Capsule Navigation */
+  .capsule-nav {
+    @apply rounded-full bg-card/80 backdrop-blur-xl border border-border/50 px-6 py-3 shadow-elegant;
+  }
+  
+  /* Floating Elements */
+  .float-animation {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  /* Pulse Glow Effect */
+  .pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite alternate;
+  }
+  
+  @keyframes pulse-glow {
+    from { box-shadow: 0 0 20px hsl(var(--primary) / 0.3); }
+    to { box-shadow: 0 0 30px hsl(var(--primary) / 0.6); }
+  }
+  
+  /* Slide in animations */
+  .slide-in-up {
+    animation: slide-in-up 0.6s ease-out;
+  }
+  
+  @keyframes slide-in-up {
+    from { 
+      opacity: 0; 
+      transform: translateY(30px); 
+    }
+    to { 
+      opacity: 1; 
+      transform: translateY(0); 
+    }
+  }
+  
+  /* Stagger animations */
+  .stagger-1 { animation-delay: 0.1s; }
+  .stagger-2 { animation-delay: 0.2s; }
+  .stagger-3 { animation-delay: 0.3s; }
+  .stagger-4 { animation-delay: 0.4s; }
+}
