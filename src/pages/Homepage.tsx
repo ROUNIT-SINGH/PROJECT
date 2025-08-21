@@ -2,12 +2,11 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { 
-  Calendar, 
-  Users, 
-  Clock, 
-  Target, 
-  TrendingUp, 
+import {
+  Calendar,
+  Users,
+  Target,
+  TrendingUp,
   Star,
   ArrowRight,
   Play,
@@ -15,6 +14,7 @@ import {
 } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { getHealth, getProjects, createProject, type HealthResponse, type Project } from '@/lib/api';
+import type { ElementType, ChangeEvent } from 'react';
 
 const Homepage = () => {
   const [animateStats, setAnimateStats] = useState(false);
@@ -36,7 +36,6 @@ const Homepage = () => {
         setHealth(h);
         setProjects(p);
       } catch (err) {
-        // eslint-disable-next-line no-console
         console.error('API error:', err);
       }
     })();
@@ -50,14 +49,20 @@ const Homepage = () => {
       setProjects((prev) => [...prev, created]);
       setNewProjectName('');
     } catch (err) {
-      // eslint-disable-next-line no-console
       console.error('Create project failed:', err);
     } finally {
       setLoading(false);
     }
   };
 
-  const features = [
+  type FeatureItem = {
+    icon: ElementType;
+    title: string;
+    description: string;
+    gradient: string;
+  };
+
+  const features: FeatureItem[] = [
     {
       icon: Calendar,
       title: 'Smart Meeting Scheduler',
@@ -137,7 +142,7 @@ const Homepage = () => {
         
         {/* Floating Elements */}
         <div className="absolute top-1/4 left-1/4 w-32 h-32 gradient-ocean rounded-full opacity-10 float-animation" />
-        <div className="absolute bottom-1/4 right-1/4 w-24 h-24 gradient-sunset rounded-full opacity-10 float-animation" style={{ animationDelay: '2s' }} />
+        <div className="absolute bottom-1/4 right-1/4 w-24 h-24 gradient-sunset rounded-full opacity-10 float-animation" />
       </section>
 
       {/* Backend Connectivity Section */}
@@ -162,7 +167,7 @@ const Homepage = () => {
                   className="border rounded px-2 py-1 text-sm"
                   placeholder="New project name"
                   value={newProjectName}
-                  onChange={(e) => setNewProjectName(e.target.value)}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => setNewProjectName(e.target.value)}
                 />
                 <Button size="sm" onClick={onAddProject} disabled={loading}>
                   {loading ? 'Adding...' : 'Add Project'}
@@ -193,7 +198,6 @@ const Homepage = () => {
               <div 
                 key={index}
                 className={`text-center ${animateStats ? 'slide-in-up' : 'opacity-0'}`}
-                style={{ animationDelay: stat.delay }}
               >
                 <div className="text-2xl md:text-3xl font-bold gradient-ocean bg-clip-text text-transparent mb-2">
                   {stat.value}
@@ -255,12 +259,14 @@ const Homepage = () => {
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { name: 'Daily Standup', icon: Users, color: 'ocean' },
-              { name: 'Sprint Planning', icon: Calendar, color: 'forest' },
-              { name: 'Sprint Review', icon: CheckCircle, color: 'sunset' },
-              { name: 'Retrospective', icon: TrendingUp, color: 'ocean' }
-            ].map((ceremony, index) => (
+            {(
+              [
+                { name: 'Daily Standup', icon: Users, color: 'ocean' },
+                { name: 'Sprint Planning', icon: Calendar, color: 'forest' },
+                { name: 'Sprint Review', icon: CheckCircle, color: 'sunset' },
+                { name: 'Retrospective', icon: TrendingUp, color: 'ocean' }
+              ] as { name: string; icon: ElementType; color: string }[]
+            ).map((ceremony, index) => (
               <NavLink key={index} to="/ceremonies">
                 <Card className="p-6 bg-card/50 border-border/50 hover:bg-card/80 transition-smooth group hover:scale-105 cursor-pointer">
                   <ceremony.icon className={`w-8 h-8 text-${ceremony.color}-light mb-4 group-hover:scale-110 transition-smooth`} />
