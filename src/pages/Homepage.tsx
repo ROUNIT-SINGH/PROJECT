@@ -14,14 +14,48 @@ import {
   CheckCircle
 } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
+import { getHealth, getProjects, createProject, type HealthResponse, type Project } from '@/lib/api';
 
 const Homepage = () => {
   const [animateStats, setAnimateStats] = useState(false);
+  const [health, setHealth] = useState<HealthResponse | null>(null);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [newProjectName, setNewProjectName] = useState('');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => setAnimateStats(true), 500);
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    // Fetch backend health and projects
+    (async () => {
+      try {
+        const [h, p] = await Promise.all([getHealth(), getProjects()]);
+        setHealth(h);
+        setProjects(p);
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error('API error:', err);
+      }
+    })();
+  }, []);
+
+  const onAddProject = async () => {
+    if (!newProjectName.trim()) return;
+    setLoading(true);
+    try {
+      const created = await createProject({ name: newProjectName.trim() });
+      setProjects((prev) => [...prev, created]);
+      setNewProjectName('');
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error('Create project failed:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const features = [
     {
@@ -104,6 +138,51 @@ const Homepage = () => {
         {/* Floating Elements */}
         <div className="absolute top-1/4 left-1/4 w-32 h-32 gradient-ocean rounded-full opacity-10 float-animation" />
         <div className="absolute bottom-1/4 right-1/4 w-24 h-24 gradient-sunset rounded-full opacity-10 float-animation" style={{ animationDelay: '2s' }} />
+      </section>
+
+      {/* Backend Connectivity Section */}
+      <section className="py-10 bg-card/20">
+        <div className="container mx-auto px-4">
+          <Card className="p-6">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div>
+                <h3 className="font-semibold text-sm mb-1">Backend Health</h3>
+                <div className="text-xs text-muted-foreground">
+                  {health ? (
+                    <span>
+                      {health.status} • {new Date(health.time).toLocaleTimeString()}
+                    </span>
+                  ) : (
+                    'Checking...'
+                  )}
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <input
+                  className="border rounded px-2 py-1 text-sm"
+                  placeholder="New project name"
+                  value={newProjectName}
+                  onChange={(e) => setNewProjectName(e.target.value)}
+                />
+                <Button size="sm" onClick={onAddProject} disabled={loading}>
+                  {loading ? 'Adding...' : 'Add Project'}
+                </Button>
+              </div>
+            </div>
+            <div className="mt-4">
+              <h4 className="font-medium text-sm mb-2">Projects</h4>
+              {projects.length === 0 ? (
+                <div className="text-xs text-muted-foreground">No projects yet</div>
+              ) : (
+                <ul className="list-disc list-inside text-sm">
+                  {projects.map((p) => (
+                    <li key={p.id}>{p.name ?? p.id}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </Card>
+        </div>
       </section>
 
       {/* Stats Section */}

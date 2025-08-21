@@ -58,6 +58,21 @@ app.post('/api/tasks', (req, res) => {
 	res.status(201).json(task);
 });
 
+app.get('/', (req, res) => {
+	res.send('Backend is running. Try GET /api/health');
+});
+
+// In production, serve the built frontend from /dist
+if (process.env.NODE_ENV === 'production') {
+	const distPath = path.join(__dirname, '..', 'dist');
+	if (fs.existsSync(distPath)) {
+		app.use(express.static(distPath));
+		app.get('*', (_, res) => {
+			res.sendFile(path.join(distPath, 'index.html'));
+		});
+	}
+}
+
 app.listen(PORT, () => {
 	console.log(`API running on http://localhost:${PORT}`);
 });
